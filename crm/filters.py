@@ -72,3 +72,25 @@ class CustomerNode(DjangoObjectType):
 
 class Query(graphene.ObjectType):
     all_customers = DjangoFilterConnectionField(CustomerNode)
+
+
+import graphene
+from graphene import relay
+from graphene_django import DjangoObjectType
+from graphene_django.filter import DjangoFilterConnectionField
+from .models import Customer
+from .filters import CustomerFilter
+
+
+# ---------------- Customer Node ----------------
+class CustomerNode(DjangoObjectType):
+    class Meta:
+        model = Customer
+        interfaces = (relay.Node,)
+        filterset_class = CustomerFilter
+        fields = ("id", "name", "email", "phone")
+
+
+# ---------------- Query ----------------
+class Query(graphene.ObjectType):
+    all_customers = DjangoFilterConnectionField(CustomerNode)
